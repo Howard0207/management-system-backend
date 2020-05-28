@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KOA-UPLOADER</title>
+</head>
+<body>
+    <div>
+        Hello KOA
+    </div>
+        上传文件<input type="file" name="file" id="file">
+        <input type="text" name="name" >
+        <input type="submit" id='submit'>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.19.2/axios.min.js"></script>
+    <script>
+        submit.addEventListener('click', function() {
+            var docs = document.getElementById('file').files[0];
+            var filename = docs.name;
+            var extMatch = /(?!\.)(\w+)$/i.exec(filename);
+            var ext = extMatch[0]
+            var token = (+ new Date()),//时间戳
+            name = docs.name, chunkCount=0;
+                var chunks = createFileChunks(docs);
+                chunkCount = chunks.length;
+                var chunkReqList =[];
+                if (chunkCount > 4) {
+                    chunkReqList = getChunkReqList(chunks);
+                } else {
+                    chunkReqList = [chunks];
+                }
+
+                var  request = async(requestList) => {
+                    for(var i = 0; i< requestList.length; i++) {
+                        await Promise.all(requestList[i].map(function(item,index) {
+                            const formData = new FormData();
+                            formData.append('token', token);
+                            formData.append('file', item.file);
+                            formData.append('index', i * 4 + index);
+                            return axios.post('/upload/docs', formData);
+                        }))
+                    }
+                    return Promise.resolve();
+                }
+
+
+                request(chunkReqList).then(() => {
+                    console.log('上传完成，发送合并请求');
+                    var formD = new FormData();
+                    formD.append('type','merge');
+                    formD.append('token',token);
+                    formD.append('chunkCount',chunkCount);
+                    formD.append('filename',name);
+                    return axios.post('/upload/docs',formD);
+                    }).then(function(res) {
+                    console.log('合并完成')
+                })
+        })
+
+        function createFileChunks(docs) {
+            let start = 0;
+            const splitSize = 1024 * 1024;
+            const chunks = [];
+            while(start < docs.size) {
+                chunks.push({ file: docs.slice(start, start + splitSize) })
+                start += splitSize;
+            }
+            return chunks;
+        }
+
+        function getChunkReqList(chunks) {
+            if(chunks.length > 4) {
+                var newChunk = chunks.splice(0,4);
+                return [newChunk].concat(getChunkReqList(chunks));
+            } else {
+                return [chunks]
+            }
+        }
+    </script>
+</body>
+</html>

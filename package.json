@@ -1,0 +1,23 @@
+{
+  "name": "management-system-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "formidable": "^1.2.2",
+    "js-sha256": "^0.9.0",
+    "jsonwebtoken": "^8.5.1",
+    "koa": "^2.11.0",
+    "koa-body": "^4.1.1",
+    "koa-jwt": "^4.0.0",
+    "koa-router": "^8.0.8",
+    "koa-static": "^5.0.0",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.1.0",
+    "sequelize": "^5.21.10",
+    "uuid": "^8.1.0"
+  },
+  "devDependencies": {
+    "chalk": "^4.0.0"
+  }
+}
