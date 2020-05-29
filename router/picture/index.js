@@ -7,7 +7,6 @@ router.get("/list", async (ctx) => {
     const id = ctx.state.id;
     const galleryId = ctx.request.query.galleryId;
     const res = await findPictureByGalleryIdAndUserId(galleryId, id);
-    console.log(res);
     ctx.body = {
         code: 200,
         data: res,

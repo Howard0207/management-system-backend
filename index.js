@@ -49,7 +49,6 @@ const verifyToken = () => async (ctx, next) => {
     let res;
     try {
         let result = (await jsonwebtoken.verify(token, SECRET)) || {};
-        console.log(res);
         // let { exp = 0 } = result,
         //     current = Math.floor(Date.now() / 1000);
         // if (current <= exp) {

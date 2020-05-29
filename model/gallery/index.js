@@ -1,6 +1,6 @@
 const Gallery = require("./gallery");
 const Sequelize = require("sequelize");
-const sequelize = require('../sequelize');
+const sequelize = require("../sequelize");
 const Picture = require("../upload/sequelize");
 const Op = Sequelize.Op;
 const { generateUUID, getCurrentTime } = require("../../utils");
@@ -42,7 +42,9 @@ const findGalleryWithPictureCounts = async (userId) => {
         {
             model: Picture,
             require: true,
-            attributes: [[Sequelize.fn("COUNT", Sequelize.col("path")), "count"]],
+            attributes: [
+                [Sequelize.fn("COUNT", Sequelize.col("path")), "count"],
+            ],
             constraints: false,
         },
     ];
@@ -52,16 +54,15 @@ const findGalleryWithPictureCounts = async (userId) => {
         raw: true,
         rollup: true,
         where: {
-            userId: userId
-        }
+            userId: userId,
+        },
     }).then(function (result) {
-        console.log(result);
-        return result
+        return result;
     });
     // const galleryList = await sequelize.query(
     //     `SELECT galleries.*, count(pictures.path) as count FROM galleries LEFT JOIN pictures ON galleries.id=pictures.galleryId WHERE galleries.userId=${userId} group by galleries.id`
     // ).then(result => {
-    //     // console.log(result) 
+    //     // console.log(result)
     //     return result;
     // });
     return galleryList;

@@ -23,7 +23,6 @@ const findPictureByGalleryIdAndUserId = async (galleryId, userId) => {
     const pictures = await Picture.findAll({
         where: { galleryId: galleryId, userId: userId },
     });
-    console.log(pictures);
     return pictures;
 };
 // // 删
