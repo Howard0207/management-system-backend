@@ -6,7 +6,7 @@ const chalk = require("chalk");
 const { verifyToken, generateUUID } = require("../../utils");
 const { findPictureByUserId, insertPicture } = require("../../model/upload");
 router.use(verifyToken);
-router.post("/docs", async (ctx) => {
+router.post("/docs", async ctx => {
     let files = ctx.request.files ? ctx.request.files.file : [];
     let body = ctx.request.body;
     let result = [];
@@ -16,15 +16,11 @@ router.post("/docs", async (ctx) => {
         files = [files];
     }
     files &&
-        files.forEach((item) => {
+        files.forEach(item => {
             let filepath = item.path;
-            let nextPath =
-                filepath.slice(0, filepath.lastIndexOf("\\") + 1) +
-                fileIndex +
-                "-" +
-                fileToken;
+            let nextPath = filepath.slice(0, filepath.lastIndexOf("\\") + 1) + fileIndex + "-" + fileToken;
             if (item.size > 0 && filepath) {
-                fs.rename(filepath, nextPath, (err) => {
+                fs.rename(filepath, nextPath, err => {
                     if (err) throw err;
                 });
             }
@@ -81,7 +77,7 @@ router.post("/docs", async (ctx) => {
     });
 });
 
-router.post("/gallery", async (ctx) => {
+router.post("/gallerys", async ctx => {
     let files = ctx.request.files ? ctx.request.files.file : [];
     let body = ctx.request.body;
     let result = [];
@@ -91,31 +87,24 @@ router.post("/gallery", async (ctx) => {
         files = [files];
     }
     files &&
-        files.forEach((item) => {
+        files.forEach(item => {
             let filepath = item.path;
-            let nextPath =
-                filepath.slice(0, filepath.lastIndexOf("\\") + 1) +
-                fileIndex +
-                "-" +
-                fileToken;
+            let nextPath = filepath.slice(0, filepath.lastIndexOf("\\") + 1) + fileIndex + "-" + fileToken;
             if (item.size > 0 && filepath) {
-                fs.rename(filepath, nextPath, (err) => {
+                fs.rename(filepath, nextPath, err => {
                     if (err) throw err;
                 });
             }
         });
+    let staticFolder = path.resolve(__dirname, "../../static") + "/";
+    const tempFolder = path.resolve(__dirname, "../../upload-temp") + "/";
     if (body.type === "merge") {
         const uuid = generateUUID();
         let filename = body.filename;
         let chunkCount = body.chunkCount;
         let filenameSplit = filename.split(".");
         let ext = filenameSplit[filenameSplit.length - 1];
-        let staticFolder = path.resolve(__dirname, "../../static/");
-        console.log(staticFolder);
-        const tempFolder = path.resolve(__dirname, "../../upload-temp/");
-        let writeStream = await fs.createWriteStream(
-            `${staticFolder}${uuid}.${ext}`
-        );
+        let writeStream = await fs.createWriteStream(`${staticFolder}${uuid}.${ext}`);
         let cindex = 0;
         function fnMergeFile() {
             let fname = `${tempFolder}${cindex}-${fileToken}`;
