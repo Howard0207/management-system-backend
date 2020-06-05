@@ -1,4 +1,4 @@
-const Picture = require("./sequelize");
+const Picture = require("./upload");
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 const { generateUUID, getCurrentTime } = require("../../utils");
@@ -18,6 +18,8 @@ const insertPicture = (path, userId) => {
         });
     return picture;
 };
+
+const insertPicturetoGallery = (path, userId, galleryId) => {};
 // 查
 const findPictureByGalleryIdAndUserId = async (galleryId, userId) => {
     const pictures = await Picture.findAll({

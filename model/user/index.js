@@ -1,4 +1,4 @@
-const User = require("./sequelize");
+const User = require("./user");
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 

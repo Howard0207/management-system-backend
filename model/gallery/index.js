@@ -1,7 +1,6 @@
 const Gallery = require("./gallery");
 const Sequelize = require("sequelize");
-const sequelize = require("../sequelize");
-const Picture = require("../upload/sequelize");
+const Picture = require("../upload/upload");
 const Op = Sequelize.Op;
 const { generateUUID, getCurrentTime } = require("../../utils");
 
